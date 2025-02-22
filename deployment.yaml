@@ -4,6 +4,8 @@ metadata:
   name: my-app-rollout
   namespace: default
 spec:
+  rollbackWindow:
+    revisions: 3
   replicas: 3
   strategy:
     canary:
