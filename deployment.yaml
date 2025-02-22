@@ -1,16 +1,19 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Rollout
 metadata:
-  name: nginx
+  name: my-app-rollout
   namespace: default
 spec:
   replicas: 3
   strategy:
     canary:
       steps:
-        - setWeight: 50         # Gradually release 50% of the traffic to the new version
-        - pause: {duration: 5m} # Pause for 1 minute to evaluate the rollout before proceeding
-        - setWeight: 100        # Release the remaining 50%
+        - setWeight: 50
+        - pause: { duration: 5m }
+        - analysis:
+            templates:
+              - templateName: pod-health-check
+        - setWeight: 100
   selector:
     matchLabels:
       app: nginx
@@ -21,19 +24,19 @@ spec:
     spec:
       containers:
         - name: nginx
-          image: nginx:latest  # Replace with the actual image you want to deploy
+          image: httpd:latest
           ports:
             - containerPort: 80
           readinessProbe:
             httpGet:
               path: /
-              port: 8000
+              port: 80
             initialDelaySeconds: 5
             periodSeconds: 5
           livenessProbe:
             httpGet:
               path: /
-              port: 8000
+              port: 80
             initialDelaySeconds: 10
             periodSeconds: 10
   progressDeadlineSeconds: 300
