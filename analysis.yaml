@@ -6,7 +6,8 @@ metadata:
 spec:
   metrics:
     - name: unavailable-pods
-      interval: 30s
+      count: 3  # Run this check 3 times before deciding success or failure
+      interval: 30s  # Run every 30 seconds
       successCondition: "result[0] == 0"  # Pass if no pods are failing
       failureCondition: "result[0] > 0"   # Fail if there are failing pods
       provider:
