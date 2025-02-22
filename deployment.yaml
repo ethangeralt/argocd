@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: nginx
-          image: httpd:latest  # Replace with the actual image you want to deploy
+          image: nginx:latest  # Replace with the actual image you want to deploy
           ports:
             - containerPort: 80
           readinessProbe:
