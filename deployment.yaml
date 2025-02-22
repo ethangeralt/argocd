@@ -5,7 +5,7 @@ metadata:
   namespace: default
 spec:
   rollbackWindow:
-    revisions: 3
+    revisions: 1
   replicas: 3
   strategy:
     canary:
