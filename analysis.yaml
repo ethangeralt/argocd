@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: pod-health-check
+  namespace: default
+spec:
+  metrics:
+    - name: unavailable-pods
+      interval: 30s
+      successCondition: "result[0] == 0"  # Pass if no pods are failing
+      failureCondition: "result[0] > 0"   # Fail if pods are in a bad state
+      provider:
+        kubernetes:
+          fieldRef:
+            fieldPath: status.unavailableReplicas
+          selector:
+            matchLabels:
+              app: nginx
