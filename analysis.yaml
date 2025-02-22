@@ -4,12 +4,13 @@ metadata:
   name: pod-health-check
   namespace: default
 spec:
+  startingStep: 1  # ✅ Ensures analysis runs even on initial deploy
   metrics:
     - name: unavailable-pods
-      count: 3  # Run this check 3 times before deciding success or failure
-      interval: 30s  # Run every 30 seconds
-      successCondition: "result[0] == 0"  # Pass if no pods are failing
-      failureCondition: "result[0] > 0"   # Fail if there are failing pods
+      count: 3
+      interval: 30s
+      successCondition: "result[0] == 0"
+      failureCondition: "result[0] > 0"
       provider:
         kubernetes:
           query: |
