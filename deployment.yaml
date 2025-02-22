@@ -9,10 +9,11 @@ spec:
     canary:
       steps:
         - setWeight: 50
-        - pause: { duration: 5m }
+        - pause: { duration: 1m }
         - analysis:
             templates:
               - templateName: pod-health-check
+            rollbackOnFailure: true  # ✅ Enables rollback on failed analysis
         - setWeight: 100
   selector:
     matchLabels:
@@ -24,19 +25,19 @@ spec:
     spec:
       containers:
         - name: nginx
-          image: nginx:latest
+          image: httpd:latest
           ports:
             - containerPort: 80
           readinessProbe:
             httpGet:
               path: /
-              port: 8080
+              port: 80
             initialDelaySeconds: 5
             periodSeconds: 5
           livenessProbe:
             httpGet:
               path: /
-              port: 8080
+              port: 80
             initialDelaySeconds: 10
             periodSeconds: 10
   progressDeadlineSeconds: 300
